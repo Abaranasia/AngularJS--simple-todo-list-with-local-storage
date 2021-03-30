@@ -1,0 +1,41 @@
+* {
+		font-family: Verdana;
+		
+	}
+	body {
+		background-color: #e4d0c6;
+	}
+	h1, h3 {
+		text-align:center
+	}
+
+	
+	#container {
+		width: 800px;
+		margin: 70px auto;
+		position: relative;
+		
+	}
+	#juegos {
+		
+		margin: 10px;
+		padding: 10px;
+	
+	}
+	
+	.tareas {
+		position: relative;
+		font-family: Verdana;
+		font-size: 0.8em;
+		background-color: #f7e3d8;
+		margin: 10px;
+		padding: 10px;
+		min-height: 200px;
+		border-radius: 10px;
+		box-shadow: 5px 6px 6px 5px rgba(0, 0, 0, 0.3);
+	}
+	.tareas p {
+		width: 780px;
+		text-align:justify;
+	}
+	

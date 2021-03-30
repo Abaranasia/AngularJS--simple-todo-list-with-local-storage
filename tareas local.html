@@ -1,0 +1,81 @@
+<!DOCTYPE HTML>
+<html ng-app="tareasApp">
+
+<head>
+    <title>Listado de tareas</title>
+    <meta charset="UTF-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="style/style.css">
+	<style>
+		.finalizada-true {
+			text-decoration: line-through;
+			color: grey;
+		}
+		
+		ul li {
+			list-style-type: none;
+		}
+	</style>
+</head>
+
+<body id="container">
+    <h2>Listado de tareas</h2>
+    <div class="tareas" ng-controller="tareaList"> <!-- define esta capa como entorno de actuación del controlador tareaList -->
+        <h4>Tareas: {{tareas.length}}</h4> <!-- Muestra el número de tareas definidas en el JSON tareas-->
+        <ul>
+            <li ng-repeat="tarea in tareas"> <!-- Recorre el JSON tareas y escribe sus textos en elementos de una lista -->
+                <label class="checkbox">
+                    <input type="checkbox" ng-model="tarea.finalizada"> <!-- Define el modelo asociado a cuando una tarea se finaliza -->
+                    <span class="finalizada-{{tarea.finalizada}}">{{tarea.texto}}</span> <!-- Al listar cada tarea le asocia una clase CSS que en caso de estar finalizada (class="finalizada-true") presentará dicha tarea en gris y tachada -->
+					<input type="button" value="-" ng-click="removeTarea($index)">
+                </label>
+            </li>
+        </ul>
+
+        <form ng-submit="addTarea()"> <!-- este formulario tiene asociado un método que se disparará al hacer submit -->
+            <input type="text" ng-model="tareaTexto" size="30" placeholder="añade una nueva tarea">
+			<!-- Este input tiene asociada una propiedad llamada tareaTexto cuyo valor usaremos en el método del submit -->
+            <input type="submit" value="añadir">
+        </form>
+
+    </div>
+    <script>
+        var app = angular.module('tareasApp', []);
+
+        app.controller('tareaList', function($scope) { //Este controlador tiene como fin definir los valores del JSON tarea, cuyos valores son accedidos desde el HTML y el método addTarea asociado al botón de submit del formulario
+			if (localStorage.tareas) {
+				$scope.tareas=angular.fromJson(localStorage.tareas); 
+			}else{			
+				$scope.tareas = [
+					{ 
+						id:1,
+						texto: 'Aprender AngularJS',
+						finalizada: true
+					}, 
+					{
+						id:2,
+						texto: 'Desarrollar aplicación con AngularJS',
+						finalizada: false
+					}];
+            }
+			
+			$scope.addTarea = function() { //Método addTarea
+                if ($scope.tareaTexto !== '') { //Si la caja de texto a añadir (tareaTexto) no está vacía...
+                    $scope.tareas.push({ //Se hace push en el JSON tareas del nuevo texto introducido en la caja (tareaTexto) como tarea no finalizada
+						id: $scope.tareas.length+1,
+                        texto: $scope.tareaTexto,
+                        finalizada: false});
+                    $scope.tareaTexto = ''; // Se vacía la caja de texto
+                }
+				localStorage.setItem("tareas", angular.toJson($scope.tareas));
+            }
+			
+			$scope.removeTarea = function(indice) {
+				 $scope.tareas.splice(indice, 1);
+				 localStorage.setItem("tareas", angular.toJson($scope.tareas));
+			}
+        });
+    </script>
+</body>
+
+</html>
